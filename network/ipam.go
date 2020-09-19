@@ -75,6 +75,7 @@ func (ipam *IPAM) dump() error {
 	return nil
 }
 
+//在网段中分配一个可用的ip地址
 func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 	// 存放网段中地址分配信息的数组
 	ipam.Subnets = &map[string]string{}
@@ -89,6 +90,7 @@ func (ipam *IPAM) Allocate(subnet *net.IPNet) (ip net.IP, err error) {
 
 	one, size := subnet.Mask.Size()
 
+	//如果没有分配过这个网段，则初始化网段的分配配置
 	if _, exist := (*ipam.Subnets)[subnet.String()]; !exist {
 		(*ipam.Subnets)[subnet.String()] = strings.Repeat("0", 1 << uint8(size - one))
 	}

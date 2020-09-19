@@ -10,6 +10,8 @@ import (
 	"os/exec"
 )
 
+//"github.com/vishvananda/netlink" 是go语言的操作网络接口、路由表等配置的库
+
 type BridgeNetworkDriver struct {
 }
 

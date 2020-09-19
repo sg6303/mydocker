@@ -36,19 +36,27 @@ type Endpoint struct {
 
 
 type Network struct {
-	Name string
-	IpRange *net.IPNet
-	Driver string
+	Name string //网络名称
+	IpRange *net.IPNet //地址段
+	Driver string //网络驱动名
 }
 
 type NetworkDriver interface {
+	//驱动名
 	Name() string
+	//创建网络
 	Create(subnet string, name string) (*Network, error)
+	//删除网络
 	Delete(network Network) error
+	//连接网络
 	Connect(network *Network, endpoint *Endpoint) error
+	//关闭连接网络
 	Disconnect(network Network, endpoint *Endpoint) error
 }
 
+/**
+将网络配置保存到指定路径
+ */
 func (nw *Network) dump(dumpPath string) error {
 	if _, err := os.Stat(dumpPath); err != nil {
 		if os.IsNotExist(err) {
@@ -147,7 +155,9 @@ func Init() error {
 }
 
 func CreateNetwork(driver, subnet, name string) error {
+	//ParseCIDR 是golang net 包的函数，是将网段的字符串转换成 net.IpNet 对象
 	_, cidr, _ := net.ParseCIDR(subnet)
+	//通过IPAM 分配网关Ip，获取到网段中第一个Ip作为网关Ip
 	ip, err := ipAllocator.Allocate(cidr)
 	if err != nil {
 		return err
