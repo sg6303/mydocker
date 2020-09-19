@@ -102,6 +102,9 @@ var initCommand = cli.Command{
 	},
 }
 
+/**
+显示所有容器
+ */
 var listCommand = cli.Command{
 	Name:  "ps",
 	Usage: "list all the containers",
